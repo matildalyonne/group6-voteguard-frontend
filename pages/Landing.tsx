@@ -108,3 +108,76 @@ export const Landing: React.FC = () => {
                     )
                 })}
             </div>
+
+
+            <div className="p-8">
+                <div className="text-center mb-8">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                        {selectedRole === UserRole.VOTER && 'Voter Access'}
+                        {selectedRole === UserRole.CANDIDATE && 'Candidate Portal'}
+                        {selectedRole === UserRole.OFFICER && 'Officer Login'}
+                        {selectedRole === UserRole.ADMIN && 'Admin Login'}
+                    </h2>
+                    <p className="text-sm text-gray-500">
+                        {selectedRole === UserRole.VOTER && 'Verify your identity and cast your ballot securely.'}
+                        {selectedRole === UserRole.CANDIDATE && 'Submit nominations and manage your profile.'}
+                        {selectedRole === UserRole.OFFICER && 'Secure area for Returning Officers.'}
+                        {selectedRole === UserRole.ADMIN && 'Restricted system administration area.'}
+                    </p>
+                </div>
+
+                <form onSubmit={handleAction} className="space-y-6">
+                    
+                    {/* Conditional Inputs */}
+                    {(selectedRole === UserRole.ADMIN || selectedRole === UserRole.OFFICER) && (
+                        <div className="space-y-4 animate-fade-in">
+                            <Input 
+                                label="Email Address"
+                                type="email"
+                                placeholder="official@elections.ucu.ac.ug"
+                                value={credentials.email}
+                                onChange={e => setCredentials({...credentials, email: e.target.value})}
+                                required
+                            />
+                            <Input 
+                                label="Password"
+                                type="password"
+                                placeholder="••••••••"
+                                value={credentials.password}
+                                onChange={e => setCredentials({...credentials, password: e.target.value})}
+                                required
+                            />
+                        </div>
+                    )}
+
+                    {error && (
+                        <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md flex items-center animate-pulse border border-red-100">
+                            <Lock className="h-4 w-4 mr-2" /> {error}
+                        </div>
+                    )}
+
+                    <Button 
+                        type="submit" 
+                        isLoading={loading}
+                        className="w-full h-12 text-lg shadow-md hover:shadow-lg transition-all" 
+                        variant={selectedRole === UserRole.VOTER ? 'accent' : 'primary'}
+                    >
+                        {selectedRole === UserRole.VOTER ? 'Proceed to Vote' : 
+                         selectedRole === UserRole.CANDIDATE ? 'Continue to Registration' : 
+                         'Sign In Dashboard'}
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                </form>
+            </div>
+            
+            {/* Visual Footer Decoration */}
+            <div className={`h-1.5 w-full transition-colors duration-500 ${
+                selectedRole === UserRole.VOTER ? 'bg-accent' : 
+                selectedRole === UserRole.CANDIDATE ? 'bg-secondary' : 
+                'bg-primary'
+            }`}></div>
+        </Card>
+      </div>
+    </div>
+  );
+};
