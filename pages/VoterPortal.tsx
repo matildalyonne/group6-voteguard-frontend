@@ -27,3 +27,26 @@ export const VoterPortal: React.FC = () => {
   const [positions, setPositions] = useState<Position[]>([]);
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [selections, setSelections] = useState<Record<string, string>>({}); // positionId -> candidateId
+
+
+  
+  // --- Step 1: Request OTP ---
+  const handleRequestOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      const res = await api.requestOtp(regNo);
+      if (res.success && res.otp) {
+        setGeneratedOtp(res.otp);
+        setShowOtpModal(true);
+        setStep('OTP');
+      } else {
+        setError(res.message);
+      }
+    } catch (e) {
+      setError('System error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
