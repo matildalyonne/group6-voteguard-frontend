@@ -48,3 +48,27 @@ export const CandidatePortal: React.FC = () => {
       setUploading(false);
     }
   };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setFileName(e.target.files[0].name);
+      setFile(e.target.files[0]);
+    }
+  };
+
+  const selectedPosition = positions.find(p => p.id === form.positionId);
+
+  if (submitted) {
+    return (
+      <div className="max-w-xl mx-auto py-12 text-center">
+        <Card>
+          <div className="text-green-500 mb-4 flex justify-center">
+            <Upload className="h-12 w-12" />
+          </div>
+          <h2 className="text-2xl font-bold mb-2">Nomination Submitted!</h2>
+          <p className="text-gray-600">Your application is now pending approval by the Returning Officer. Check back later for your status.</p>
+          <Button className="mt-6" variant="outline" onClick={() => { setSubmitted(false); setForm({ ...form, name: '', regNo: '', manifesto: '' }); setFileName(''); setFile(null); }}>Submit Another</Button>
+        </Card>
+      </div>
+    );
+  }
