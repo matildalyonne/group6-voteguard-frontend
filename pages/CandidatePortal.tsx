@@ -72,3 +72,61 @@ export const CandidatePortal: React.FC = () => {
       </div>
     );
   }
+
+  
+  return (
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-2xl font-bold mb-6">Candidate Registration</h1>
+      <Card title="Submit Nomination">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Input
+            label="Full Name"
+            placeholder="Ampaire Colleen"
+            value={form.name}
+            onChange={e => setForm({ ...form, name: e.target.value })}
+            required
+          />
+
+          <Input
+            label="Registration Number"
+            placeholder="e.g. M24B13/026"
+            value={form.regNo}
+            onChange={e => setForm({ ...form, regNo: e.target.value })}
+            required
+          />
+
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-slate-700">Position</label>
+            <select
+              className="block w-full rounded-md border-slate-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 bg-white text-slate-900"
+              value={form.positionId}
+              onChange={e => setForm({ ...form, positionId: e.target.value })}
+              required
+            >
+              <option value="">Select a position...</option>
+              {positions.map(p => (
+                <option key={p.id} value={p.id}>{p.name} ({p.semester})</option>
+              ))}
+            </select>
+          </div>
+
+          {selectedPosition && (
+            <div className="bg-blue-50 border border-blue-200 rounded-md p-4 flex gap-3">
+              <Info className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-sm font-semibold text-blue-900">Eligibility Criteria</h4>
+                <p className="text-sm text-blue-800 mt-1">{selectedPosition.eligibilityRules}</p>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-slate-700">Manifesto / Platform</label>
+            <textarea
+              className="block w-full rounded-md border-slate-300 shadow-sm focus:border-primary focus:ring-primary sm:text-sm border p-2 h-32 bg-white text-slate-900"
+              placeholder="What do you plan to achieve?"
+              value={form.manifesto}
+              onChange={e => setForm({ ...form, manifesto: e.target.value })}
+              required
+            />
+          </div>
