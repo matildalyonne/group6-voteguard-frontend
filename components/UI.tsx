@@ -50,3 +50,27 @@ export const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
+
+
+// Card
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
+  title?: string;
+  action?: React.ReactNode;
+}
+
+export const Card: React.FC<CardProps> = ({ 
+  children, className, title, action, ...props 
+}) => (
+  <div 
+    className={cn("bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300", className)} 
+    {...props}
+  >
+    {title && (
+      <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-slate-50 to-white">
+        <h3 className="font-bold text-lg text-slate-900 tracking-tight">{title}</h3>
+        {action && <div>{action}</div>}
+      </div>
+    )}
+    <div className="p-6">{children}</div>
+  </div>
+);
