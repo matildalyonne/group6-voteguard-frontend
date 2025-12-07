@@ -50,3 +50,30 @@ export const VoterPortal: React.FC = () => {
       setLoading(false);
     }
   };
+
+    // --- Step 2: Verify OTP ---
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    try {
+      const res = await api.verifyOtp(regNo, otp);
+      if (res.success && res.token && res.voter) {
+        setToken(res.token);
+        // Login strictly as voter in context for header
+        login(res.voter.status as any, res.voter.name, res.token);
+
+        // Fetch Ballot Data
+        const [p, c] = await Promise.all([api.getPositions(), api.getCandidates()]);
+        setPositions(p);
+        setCandidates(c);
+        setStep('BALLOT');
+      } else {
+        setError(res.message || 'Verification failed');
+      }
+    } catch (e) {
+      setError('Invalid OTP.');
+    } finally {
+      setLoading(false);
+    }
+  };
