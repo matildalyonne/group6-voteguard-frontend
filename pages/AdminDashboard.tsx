@@ -72,3 +72,86 @@ export const AdminDashboard: React.FC = () => {
       setLoading(false);
     }
   };
+
+  
+  const handleCreatePosition = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newPosition.name) return;
+    await api.createPosition({
+      name: newPosition.name,
+      seats: newPosition.seats,
+      semester: newPosition.semester,
+      eligibilityRules: newPosition.eligibilityRules || 'Open to all eligible voters.',
+      opensAt: new Date().toISOString(),
+      closesAt: new Date(Date.now() + 86400000 * 7).toISOString()
+    });
+    setNewPosition({ name: '', seats: 1, semester: 'Trinity', eligibilityRules: '' });
+    loadData();
+  };
+
+  const handleToggleStatus = async (id: string, action: 'OPEN' | 'CLOSE') => {
+    await api.updatePositionStatus(id, action);
+    loadData();
+  };
+
+  const handleEditClick = (position: Position) => {
+    setEditingId(position.id);
+    setEditForm({
+      ...position,
+      semester: position.semester || 'Trinity',
+      eligibilityRules: position.eligibilityRules || ''
+    });
+  };
+
+  const handleSaveEdit = async () => {
+    if (editingId && editForm.name) {
+      await api.updatePositionDetails(editingId, {
+        name: editForm.name,
+        seats: editForm.seats,
+        semester: editForm.semester || 'Trinity',
+        eligibilityRules: editForm.eligibilityRules || ''
+      });
+      setEditingId(null);
+      loadData();
+    }
+  };
+
+  const handleAddVoter = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await api.addVoter(newVoter);
+      setNewVoter({ regNo: '', name: '', email: '', program: '' });
+      alert('Voter added successfully');
+      loadData();
+    } catch (e: any) {
+      alert(e.message);
+    }
+  };
+
+  const handleCsvUpload = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!csvFile) return;
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const text = event.target?.result as string;
+        const lines = text.split('\n');
+        const parsedVoters = lines
+          .map(line => {
+            const [regNo, name, email, program] = line.split(',').map(s => s.trim());
+            return { regNo, name, email, program };
+          })
+          .filter(v => v.regNo && v.name && v.regNo !== 'regNo' && v.regNo !== 'reg_no');
+
+        const result = await api.bulkAddVoters(parsedVoters);
+        alert(`Import complete: ${result.added} added, ${result.skipped} skipped (duplicates).`);
+        setCsvFile(null);
+        loadData();
+      } catch (err) {
+        console.error(err);
+        alert('Failed to parse CSV. Ensure format: regNo,name,email,program');
+      }
+    };
+    reader.readAsText(csvFile);
+  };
