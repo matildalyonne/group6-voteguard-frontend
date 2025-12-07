@@ -34,3 +34,41 @@ export const AdminDashboard: React.FC = () => {
     program: ''
   });
   const [csvFile, setCsvFile] = useState<File | null>(null);
+
+  // Search & Edit Voter State
+  const [voterSearchQuery, setVoterSearchQuery] = useState('');
+  const [searchedVoters, setSearchedVoters] = useState<Voter[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const [loading, setLoading] = useState(true);
+  const [loadTestResult, setLoadTestResult] = useState<any>(null);
+  const [testing, setTesting] = useState(false);
+  const [resetting, setResetting] = useState(false);
+
+  // Edit State
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<Partial<Position>>({});
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      const [s, a, p, v] = await Promise.all([
+        api.getStats(),
+        api.getAuditLogs(),
+        api.getPositions(),
+        api.getVoters()
+      ]);
+      setStats(s);
+      setAuditLogs(a);
+      setPositions(p);
+      setVoters(v);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
