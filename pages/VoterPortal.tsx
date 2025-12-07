@@ -77,3 +77,41 @@ export const VoterPortal: React.FC = () => {
       setLoading(false);
     }
   };
+
+  
+
+
+
+  // --- Step 3: Vote ---
+  const toggleSelection = (positionId: string, candidateId: string) => {
+    setSelections(prev => ({
+      ...prev,
+      [positionId]: candidateId
+    }));
+  };
+
+  const submitVote = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const votesToCast = Object.entries(selections).map(([pid, cid]) => ({
+        positionId: pid,
+        candidateId: cid as string
+      }));
+      await api.castVote(token, votesToCast);
+      setStep('DONE');
+    } catch (e: any) {
+      setError(e.message || 'Failed to cast vote. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const closeOtpModal = () => {
+    setShowOtpModal(false);
+  };
+
+  const handleFinish = () => {
+    logout();
+    navigate('/');
+  };
