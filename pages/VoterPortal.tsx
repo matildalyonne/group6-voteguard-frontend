@@ -115,3 +115,30 @@ export const VoterPortal: React.FC = () => {
     logout();
     navigate('/');
   };
+
+  
+
+  if (step === 'ID') {
+    return (
+      <div className="max-w-md mx-auto py-12 animate-slide-up">
+        <Card title="Voter Verification">
+          <form onSubmit={handleRequestOtp} className="space-y-6">
+            <p className="text-sm text-gray-500">Enter your Registration Number to check eligibility.</p>
+            <Input
+              label="Registration Number"
+              placeholder="e.g. M24B13/026"
+              value={regNo}
+              onChange={e => setRegNo(e.target.value)}
+              error={error}
+            />
+            <Button type="submit" className="w-full" isLoading={loading} size="lg">
+              Check Eligibility
+            </Button>
+            <div className="text-xs text-center text-secondary mt-4 bg-cyan-50 p-2 rounded font-semibold tracking-wide border border-cyan-100">
+              A Secure Ballot, A Secure Vote
+            </div>
+          </form>
+        </Card>
+      </div>
+    );
+  }
