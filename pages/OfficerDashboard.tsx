@@ -60,3 +60,29 @@ export const OfficerDashboard: React.FC = () => {
                 Submitted on {new Date(candidate.createdAt).toLocaleDateString()}
               </div>
             </div>
+            
+
+
+
+            {candidate.status === CandidateStatus.SUBMITTED && (
+              <div className="flex flex-col gap-2 justify-center border-l pl-6 border-gray-100 min-w-[150px]">
+                <Button size="sm" onClick={() => handleStatusChange(candidate.id, CandidateStatus.APPROVED)}>
+                  <Check className="h-4 w-4 mr-2" /> Approve
+                </Button>
+                <Button size="sm" variant="danger" onClick={() => handleStatusChange(candidate.id, CandidateStatus.REJECTED)}>
+                  <X className="h-4 w-4 mr-2" /> Reject
+                </Button>
+              </div>
+            )}
+            {candidate.status !== CandidateStatus.SUBMITTED && (
+              <div className="flex flex-col justify-center border-l pl-6 border-gray-100 min-w-[150px] text-sm text-gray-500 text-center">
+                Action taken
+              </div>
+            )}
+          </Card>
+        ))}
+        {candidates.length === 0 && <div className="text-center text-gray-500 py-12">No nominations found.</div>}
+      </div>
+    </div>
+  );
+};
