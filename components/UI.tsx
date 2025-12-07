@@ -96,3 +96,25 @@ export const Input: React.FC<InputProps> = ({ label, error, className, ...props 
     {error && <p className="text-sm text-red-600">{error}</p>}
   </div>
 );
+
+
+// Badge
+export const Badge: React.FC<{ status: string; className?: string }> = ({ status, className }) => {
+  const styles: Record<string, string> = {
+    APPROVED: 'bg-secondary/10 text-secondary border-secondary/20', // Teal
+    SUBMITTED: 'bg-accent/20 text-yellow-800 border-accent/30', // Gold
+    REJECTED: 'bg-red-100 text-red-800 border-red-200',
+    ELIGIBLE: 'bg-primary/10 text-primary border-primary/20', // Blue
+    VERIFIED: 'bg-indigo-100 text-indigo-800 border-indigo-200',
+    VOTED: 'bg-purple-100 text-purple-800 border-purple-200',
+    BLOCKED: 'bg-gray-100 text-gray-800 border-gray-200'
+  };
+
+  const style = styles[status] || 'bg-gray-100 text-gray-800 border-gray-200';
+
+  return (
+    <span className={cn("inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wide border shadow-sm", style, className)}>
+      {status}
+    </span>
+  );
+};
