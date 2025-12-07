@@ -1,0 +1,5 @@
+{
+  "name": "VoteGuard",
+  "description": "A secure, auditable E-Voting System featuring nominations, voter verification, secret ballots, and real-time reporting.",
+  "requestFramePermissions": []
+}
