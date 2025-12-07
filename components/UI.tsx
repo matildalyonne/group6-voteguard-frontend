@@ -74,3 +74,25 @@ export const Card: React.FC<CardProps> = ({
     <div className="p-6">{children}</div>
   </div>
 );
+
+
+// Input
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+}
+
+export const Input: React.FC<InputProps> = ({ label, error, className, ...props }) => (
+  <div className="space-y-1">
+    {label && <label className="block text-sm font-medium text-slate-700">{label}</label>}
+    <input
+      className={cn(
+        "block w-full rounded-md border-slate-300 shadow-sm focus:border-secondary focus:ring-secondary sm:text-sm border p-2 bg-white text-slate-900 transition-all duration-200 focus:shadow-md",
+        error ? "border-red-300 focus:border-red-500 focus:ring-red-500" : "hover:border-slate-400",
+        className
+      )}
+      {...props}
+    />
+    {error && <p className="text-sm text-red-600">{error}</p>}
+  </div>
+);
