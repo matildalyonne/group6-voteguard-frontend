@@ -130,3 +130,50 @@ export const CandidatePortal: React.FC = () => {
               required
             />
           </div>
+
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-slate-700">Photo Upload</label>
+            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md bg-white hover:bg-gray-50 transition-colors">
+              <label htmlFor="file-upload" className="space-y-1 text-center w-full cursor-pointer">
+                {fileName ? (
+                  <div className="flex flex-col items-center animate-in fade-in duration-300">
+                    <CheckCircle className="h-12 w-12 text-green-500 mb-2" />
+                    <p className="text-sm text-gray-900 font-medium truncate max-w-xs">{fileName}</p>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.preventDefault(); setFileName(''); setFile(null); }}
+                      className="mt-2 inline-flex items-center text-xs text-red-600 hover:text-red-800"
+                    >
+                      <Trash2 className="h-3 w-3 mr-1" /> Remove file
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col items-center justify-center">
+                    <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                    <div className="flex text-sm text-gray-600 justify-center flex-wrap mt-2">
+                      <span className="font-medium text-primary hover:text-blue-500">Upload a file</span>
+                      <p className="pl-1">or drag and drop</p>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 10MB</p>
+                  </div>
+                )}
+                <input
+                  id="file-upload"
+                  name="file-upload"
+                  type="file"
+                  className="sr-only"
+                  onChange={handleFileChange}
+                  accept="image/*"
+                />
+              </label>
+            </div>
+          </div>
+
+          <Button type="submit" className="w-full" isLoading={uploading}>
+            {uploading ? 'Uploading & Submitting...' : 'Submit Nomination'}
+          </Button>
+        </form>
+      </Card>
+    </div>
+  );
+};
